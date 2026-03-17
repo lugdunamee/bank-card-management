@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="001-create-cards-table" author="cascade">
+        <createTable tableName="cards">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="number_encrypted" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="owner" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="expiry_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="balance" type="numeric(19,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="cards" indexName="idx_cards_owner">
+            <column name="owner"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

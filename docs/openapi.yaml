@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: Bank Card Management API
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  /api/auth/register:
+    post:
+      summary: Register user (ROLE_USER)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201': { description: Created }
+  /api/auth/login:
+    post:
+      summary: Login and receive access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken: { type: string }
+                  tokenType: { type: string }
+  /api/cards:
+    get:
+      summary: Search cards (USER: own, ADMIN: all)
+      parameters:
+        - in: query
+          name: owner
+          required: false
+          schema: { type: string }
+        - in: query
+          name: page
+          required: false
+          schema: { type: integer, minimum: 0 }
+        - in: query
+          name: size
+          required: false
+          schema: { type: integer, minimum: 1 }
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create card (ADMIN)
+      responses:
+        '201': { description: Created }
+  /api/cards/{id}:
+    get:
+      summary: Get card by id (USER: own, ADMIN: any)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+    delete:
+      summary: Delete card (ADMIN)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: No Content }
+  /api/cards/{id}/status:
+    patch:
+      summary: Update card status (ADMIN)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [ACTIVE, BLOCK_REQUESTED, BLOCKED, EXPIRED]
+      responses:
+        '200': { description: OK }
+  /api/cards/{id}/block-request:
+    post:
+      summary: Request to block card (USER)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200': { description: OK }
+  /api/transfers:
+    post:
+      summary: Transfer between own cards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromCardId, toCardId, amount]
+              properties:
+                fromCardId: { type: string, format: uuid }
+                toCardId: { type: string, format: uuid }
+                amount: { type: number }
+      responses:
+        '201': { description: Created }
+  /api/admin/users:
+    get:
+      summary: List users (ADMIN)
+      responses:
+        '200': { description: OK }
+  /api/admin/users/{id}/enabled:
+    patch:
+      summary: Enable/disable user (ADMIN)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled: { type: boolean }
+      responses:
+        '200': { description: OK }
+  /api/admin/users/{id}/roles:
+    patch:
+      summary: Set user roles (ADMIN)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [roles]
+              properties:
+                roles:
+                  type: array
+                  items: { type: string }
+      responses:
+        '200': { description: OK }

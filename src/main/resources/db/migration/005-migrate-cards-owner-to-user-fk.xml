@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="005-migrate-cards-owner-to-user-fk" author="cascade">
+        <addColumn tableName="cards">
+            <column name="owner_user_id" type="uuid"/>
+        </addColumn>
+
+        <sql dbms="postgresql">
+            UPDATE cards c
+            SET owner_user_id = u.id
+            FROM users u
+            WHERE lower(c.owner) = lower(u.username)
+        </sql>
+
+        <sql dbms="h2">
+            UPDATE cards c
+            SET owner_user_id = (
+                SELECT u.id FROM users u WHERE lower(u.username) = lower(c.owner)
+            )
+        </sql>
+
+        <addNotNullConstraint tableName="cards" columnName="owner_user_id" columnDataType="uuid"/>
+
+        <addForeignKeyConstraint baseTableName="cards"
+                                 baseColumnNames="owner_user_id"
+                                 constraintName="fk_cards_owner_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <createIndex tableName="cards" indexName="idx_cards_owner_user_id">
+            <column name="owner_user_id"/>
+        </createIndex>
+
+        <dropIndex tableName="cards" indexName="idx_cards_owner"/>
+        <dropColumn tableName="cards" columnName="owner"/>
+    </changeSet>
+
+</databaseChangeLog>

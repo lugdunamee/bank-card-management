@@ -3,5 +3,11 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbmigration-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="db/migration/001-create-cards-table.xml" relativeToChangelogFile="false"/>
+    <include file="db/migration/002-add-cards-last4.xml" relativeToChangelogFile="false"/>
+    <include file="db/migration/003-create-users-and-roles.xml" relativeToChangelogFile="false"/>
+    <include file="db/migration/004-create-transfers-table.xml" relativeToChangelogFile="false"/>
+    <include file="db/migration/005-migrate-cards-owner-to-user-fk.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

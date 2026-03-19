@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Transfers API.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/transfers")
@@ -23,6 +26,9 @@ public class TransferController {
 
     private final TransferService transferService;
 
+    /**
+     * Creates a money transfer.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransferDto create(@Valid @RequestBody TransferRequestDto request, Authentication authentication) {

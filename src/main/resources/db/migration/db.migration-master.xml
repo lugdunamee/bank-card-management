@@ -10,4 +10,5 @@
     <include file="db/migration/003-create-users-and-roles.xml" relativeToChangelogFile="false"/>
     <include file="db/migration/004-create-transfers-table.xml" relativeToChangelogFile="false"/>
     <include file="db/migration/005-migrate-cards-owner-to-user-fk.xml" relativeToChangelogFile="false"/>
+    <include file="db/migration/006-add-card-audit-and-version.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

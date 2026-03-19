@@ -29,6 +29,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
+/**
+ * Cards API.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/cards")
@@ -38,6 +41,9 @@ public class CardController {
     private final CardService cardService;
     private final CardMapper cardMapper;
 
+    /**
+     * Creates a new card.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CardDto create(@Valid @RequestBody CardRequestDto request) {
@@ -45,6 +51,9 @@ public class CardController {
         return cardService.create(request);
     }
 
+    /**
+     * Searches cards.
+     */
     @GetMapping
     public Page<CardDto> search(
             @RequestParam(value = "owner", required = false) String owner,
@@ -66,6 +75,9 @@ public class CardController {
         return cardService.searchMyCards(username, pageable);
     }
 
+    /**
+     * Returns a card by id.
+     */
     @GetMapping("/{id}")
     public CardDto getById(@PathVariable UUID id, Authentication authentication) {
         Card card = cardService.getById(id);
@@ -73,17 +85,26 @@ public class CardController {
         return cardMapper.toDto(card);
     }
 
+    /**
+     * Deletes a card.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {
         cardService.delete(id);
     }
 
+    /**
+     * Updates card status.
+     */
     @PatchMapping("/{id}/status")
     public CardDto updateStatus(@PathVariable UUID id, @Valid @RequestBody CardStatusUpdateRequest request) {
         return cardService.updateStatus(id, request.status());
     }
 
+    /**
+     * Requests card blocking.
+     */
     @PostMapping("/{id}/block-request")
     public CardDto requestBlock(@PathVariable UUID id, Authentication authentication) {
         Card card = cardService.getById(id);

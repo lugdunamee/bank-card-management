@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Authentication API.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -22,6 +25,9 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Registers a new user.
+     */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@Valid @RequestBody AuthRegisterRequest request) {
@@ -29,6 +35,9 @@ public class AuthController {
         authService.registerUser(request.username(), request.password());
     }
 
+    /**
+     * Performs login and returns an access token.
+     */
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody AuthLoginRequest request) {
         log.info("HTTP POST /api/auth/login username={}", request.username());

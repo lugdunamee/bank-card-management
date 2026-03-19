@@ -76,8 +76,8 @@ public class TransferServiceImpl implements TransferService {
         from.setBalance(from.getBalance().subtract(amount));
         to.setBalance(to.getBalance().add(amount));
 
-        cardRepository.save(from);
-        cardRepository.save(to);
+       // cardRepository.save(from);
+       // cardRepository.save(to);
 
         Transfer transfer = new Transfer();
         transfer.setFromCardId(from.getId());
